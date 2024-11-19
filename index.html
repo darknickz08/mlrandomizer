@@ -6,7 +6,7 @@
 	<link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css"></style>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 	<style type="text/css">
-		.box {border: 1px solid black; min-height: 150px;}
+		.box {border: 1px solid black; min-height: 150px;margin: 10px;}
 		.options {margin: 10px;}
 		.options .btn{ margin-left: 7px; }
 	</style>
@@ -15,21 +15,24 @@
 	<div class="col-md-12">
 		<label> Player </label>
 		<div class="row">
-			<div class="col-md-12 box">
+			<div class="options">
+				<a class="btn btn-primary all" href="#" >All</a>
+			</div>
+			<div class="col-md-12 box" id="sel1">
 				
 			</div>
 		</div>
-		<div class="options">
-			<a class="btn btn-primary all" href="#" >All</a>
-		</div>
+		
 		<div class="row">
+			<div class="col-md-12">
+			<a class="btn btn-primary " href="#" id="rando">Randomize</a><br><br></div>
 			<label> Group 1 </label>
 			<div class="col-md-12 box" id="res1">
 				
 			</div>
 			<br>
 			<label> Group 2  </label>
-			<div class="col-md-12 box" id="res1">
+			<div class="col-md-12 box" id="res2">
 				
 			</div>
 		</div>
@@ -39,6 +42,8 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" ></script>
 <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.min.js" ></script>
 <script type="text/javascript">
+	var group1 = [];
+	var group2 = [];
 	var selected = [];
 
 	var names = [
@@ -54,6 +59,13 @@
 		'Nikki',
 	];
 
+	var main = [
+		'Romnick',
+		'Raymond',
+		'Arnie',
+		'Julius',
+	];
+
 	$.each(names, function(k,v){
 		$(".options").append('<a class="btn btn-primary nn" href="#" >'+v+'</a>');
 	});
@@ -62,15 +74,55 @@
 		var val = $(this).text();
 		selected.push(val);
 
-		$(".box").html(selected.toString());
+		$("#sel1").html(selected.toString());
 		return false;
 	})
 
 	$(document).on("click" ,".options .all"  , function() {
 		selected = names;
-		$(".box").html(selected.toString());
+		$("#sel1").html(selected.toString());
 		return false;
-	})
+	});
+
+	$("#rando").click(function () {
+	    // Reset groups
+	    group1 = [];
+	    group2 = [];
+	    
+	    // Shuffle the main array for randomness
+	    let shuffledMain = [...main].sort(() => Math.random() - 0.5);
+
+	    // Divide main array equally between group1 and group2
+	    for (let i = 0; i < shuffledMain.length; i++) {
+	        if (i % 2 === 0) {
+	            group1.push(shuffledMain[i]);
+	        } else {
+	            group2.push(shuffledMain[i]);
+	        }
+	    }
+
+	    // Shuffle the rest of the selected members
+	    let remaining = selected.filter(name => !main.includes(name)).sort(() => Math.random() - 0.5);
+
+	    // Distribute remaining members into groups randomly
+	    remaining.forEach(member => {
+	        if (group1.length <= group2.length) {
+	            group1.push(member);
+	        } else {
+	            group2.push(member);
+	        }
+	    });
+
+	    // Ensure both groups have at least 2 members
+	    if (group1.length < 2 || group2.length < 2) {
+	        alert("Each group must have at least 2 members. Try again!");
+	        return;
+	    }
+
+	    // Log the results (replace with your preferred output method)
+	    $("#res1").html(group1.toString());
+	    $("#res2").html(group2.toString());
+	});
 </script>
 </html>
 
