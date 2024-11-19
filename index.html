@@ -90,7 +90,7 @@
 	    group2 = [];
 	    
 	    // Shuffle the main array for randomness
-	    let shuffledMain = [...main].sort(() => Math.random() - 0.5);
+	    let shuffledMain = [...selected].sort(() => Math.random() - 0.5);
 
 	    // Divide main array equally between group1 and group2
 	    for (let i = 0; i < shuffledMain.length; i++) {
@@ -102,7 +102,7 @@
 	    }
 
 	    // Shuffle the rest of the selected members
-	    let remaining = selected.filter(name => !main.includes(name)).sort(() => Math.random() - 0.5);
+	    let remaining = selected.filter(name => !selected.includes(name)).sort(() => Math.random() - 0.5);
 
 	    // Distribute remaining members into groups randomly
 	    remaining.forEach(member => {
